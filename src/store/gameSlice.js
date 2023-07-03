@@ -5,6 +5,7 @@ import { calculateAIMove } from '../calculateAIMove';
 const gameSlice = createSlice({
   name: 'game',
   initialState: {
+    playerName:'',
     gameState: Array(9).fill(null),
     currentPlayer: 'X',
     winner: null,
@@ -44,9 +45,12 @@ const gameSlice = createSlice({
       state.winner = null;
       state.isTie = false;
     },
+    setPlayerName: (state, action) => {
+        state.playerName = action.payload;
+      },
   },
 });
 
-export const { makeMove, resetGame } = gameSlice.actions;
+export const { makeMove, resetGame, setPlayerName } = gameSlice.actions;
 
 export default gameSlice.reducer;

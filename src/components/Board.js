@@ -7,10 +7,13 @@ const Board = () => {
   const currentPlayer = useSelector(state => state.game.currentPlayer);
   const winner = useSelector(state => state.game.winner);
   const dispatch = useDispatch();
+  const playerName = useSelector(state => state.game.playerName);
+  console.log(playerName)
 
   useEffect(() => {
+    console.log(winner)
     if (winner) {
-      alert(`Player ${winner} wins!`);
+      {winner === 'X' ? alert(`${playerName} wins`) : alert('Computer got you this time')}
     }
   }, [winner]);
 
