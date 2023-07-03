@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { calculateWinner } from '../calculateWinner';
+import { calculateAIMove } from '../calculateAIMove';
 
 const gameSlice = createSlice({
   name: 'game',
@@ -11,32 +12,31 @@ const gameSlice = createSlice({
   },
   reducers: {
     makeMove: (state, action) => {
-        console.log(action)
         const { index } = action.payload;
-      const currentPlayer = state.currentPlayer;
-      const updatedGameState = [...state.gameState];
-
-      // Check if the cell is already occupied or if there is a winner
-      if (updatedGameState[index] || state.winner) {
-        return;
-      }
-
-      // Update the gameState with the current player's move
-      updatedGameState[index] = currentPlayer;
-
-      // Check for a winner or a tie game
-      const winner = calculateWinner(updatedGameState);
-      const isTie = !updatedGameState.includes(null) && !winner;
-
-      // Update the state with the new game state, current player, winner, and tie status
-      state.gameState = updatedGameState;
-      state.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-      state.winner = winner;
-      state.isTie = isTie;
-
-      if (winner) {
-        window.alert(`Player ${winner} wins!`); // Show an alert with the winner
-      }
+        const currentPlayer = state.currentPlayer;
+  
+        // Update the current player's move in the game state
+        state.gameState[index] = currentPlayer;
+  
+        // Check for a winner
+        const winner = calculateWinner(state.gameState);
+        if (winner) {
+          state.winner = winner;
+        }
+  
+        // Toggle the current player
+        state.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+  
+        // AI move
+        if (!state.winner && !state.isTie && state.currentPlayer === 'O') {
+          const aiMove = calculateAIMove(state.gameState);
+          state.gameState[aiMove] = 'O';
+          const aiWinner = calculateWinner(state.gameState);
+          if (aiWinner) {
+            state.winner = aiWinner;
+          }
+          state.currentPlayer = 'X';
+        }
     },
     resetGame: (state) => {
       state.gameState = Array(9).fill(null);

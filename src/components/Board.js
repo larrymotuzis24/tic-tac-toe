@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { makeMove } from "../store/gameSlice";
 
 const Board = () => {
@@ -7,6 +7,13 @@ const Board = () => {
   const currentPlayer = useSelector(state => state.game.currentPlayer);
   const winner = useSelector(state => state.game.winner);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (winner) {
+      alert(`Player ${winner} wins!`);
+    }
+  }, [winner]);
+
 
   const handleCellClick = (index) => {
     if (!gameState[index] && !winner) {
