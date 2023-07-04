@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { makeMove } from "../store/gameSlice";
+import { useEffect, useState } from "react";
+import { makeMove, resetGame } from "../store/gameSlice";
+import { calculateAIMove } from "../calculateAIMove";
 
 const Board = () => {
   const gameState = useSelector(state => state.game.gameState);
@@ -8,14 +9,32 @@ const Board = () => {
   const winner = useSelector(state => state.game.winner);
   const dispatch = useDispatch();
   const playerName = useSelector(state => state.game.playerName);
-  console.log(playerName)
+  const [isComputerThinking, setIsComputerThinking] = useState(false);
+  
+  const handleAIMove = () => {
+    if (!winner && currentPlayer === 'O') {
+      setIsComputerThinking(true);
+      setTimeout(() => {
+        const aiMove = calculateAIMove(gameState);
+        dispatch(makeMove({ index: aiMove }));
+        setIsComputerThinking(false); 
+      }, 1000); 
+    }
+  };
 
   useEffect(() => {
-    console.log(winner)
     if (winner) {
-      {winner === 'X' ? alert(`${playerName} wins`) : alert('Computer got you this time')}
+      if (winner === 'X') {
+        alert(`${playerName} wins`);
+      } else {
+        alert('Computer got you this time');
+      }
+      dispatch(resetGame());
+    } else if (!winner && currentPlayer === 'O') {
+      handleAIMove();
     }
-  }, [winner]);
+  }, [gameState, currentPlayer, winner]);
+
 
 
   const handleCellClick = (index) => {
@@ -26,7 +45,18 @@ const Board = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen bg-gray-900">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="max-w-xl w-full relative">
+        {isComputerThinking ? (
+          <div className="flex justify-center absolute bottom-full w-full mb-2">
+            <p className="text-white">Computer is thinking...</p>
+          </div>
+        ) : (
+          <div className="flex justify-center absolute bottom-full w-full mb-2">
+            <p className="text-white">Your Turn</p>
+          </div>
+        )}
+      </div>
+      <div className="grid grid-cols-3 gap-4 mx-auto">
         {gameState.map((cell, index) => (
           <button
             onClick={() => handleCellClick(index)}
@@ -39,6 +69,7 @@ const Board = () => {
       </div>
     </div>
   );
+  
 }
 
 export default Board;
