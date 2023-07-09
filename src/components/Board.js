@@ -25,7 +25,6 @@ const Board = () => {
     }
   };
 
-  console.log(isTie);
 
   useEffect(() => {
     if(isTie){
@@ -44,6 +43,7 @@ const Board = () => {
     } else if (!winner && currentPlayer === 'O') {
       handleAIMove();
     }
+    // eslint-disable-next-line
   }, [gameState, currentPlayer, winner, isTie]);
 
 
