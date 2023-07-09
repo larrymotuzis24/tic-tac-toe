@@ -57,37 +57,36 @@ const Board = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen mx-auto bg-gray-400">
-  <div className="max-w-3xl p-6 rounded-lg bg-white shadow-md">
-    <h1 className="text-4xl font-bold text-center mb-12">Tic Tac Toe</h1>
-    <div className="w-full max-w-2xl relative">
-      {isComputerThinking ? (
-        <div className="flex justify-center absolute bottom-full w-full mb-2">
-          <p className="text-black">Computer is thinking...</p>
+      <div className="max-w-screen-sm p-6 rounded-lg bg-white shadow-md">
+        <h1 className="text-4xl font-bold text-center mb-12">Tic Tac Toe</h1>
+        <div className="w-full max-w-xs relative">
+          {isComputerThinking ? (
+            <div className="flex justify-center absolute bottom-full w-full mb-2">
+              <p className="text-black">Computer is thinking...</p>
+            </div>
+          ) : (
+            <div className="flex justify-center absolute bottom-full w-full mb-2">
+              <p className="text-black">Your Turn</p>
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="flex justify-center absolute bottom-full w-full mb-2">
-          <p className="text-black">Your Turn</p>
+        <div className="grid grid-cols-3 gap-2">
+          {gameState.map((cell, index) => (
+            <button
+              onClick={() => handleCellClick(index)}
+              className={`w-16 h-16 border border-gray-700 bg-gradient-to-br from-purple-500 to-indigo-500 flex justify-center items-center text-2xl font-bold text-white hover:opacity-75 transition duration-300 ${
+                cell === 'X' ? 'text-green-400' : 'text-red-400'
+              }`}
+              key={index}
+              disabled={!isUserTurn || isComputerThinking}
+            >
+              {cell}
+            </button>
+          ))}
         </div>
-      )}
+      </div>
     </div>
-    <div className="grid grid-cols-3 gap-4">
-      {gameState.map((cell, index) => (
-        <button
-          onClick={() => handleCellClick(index)}
-          className={`w-24 h-24 border border-gray-700 bg-gradient-to-br from-purple-500 to-indigo-500 flex justify-center items-center text-4xl font-bold text-white hover:opacity-75 transition duration-300 ${
-            cell === 'X' ? 'text-green-400' : 'text-red-400'
-          }`}
-          key={index}
-          disabled={!isUserTurn || isComputerThinking}
-        >
-          {cell}
-        </button>
-      ))}
-    </div>
-  </div>
-</div>
   );
-  
 }
 
 export default Board;
