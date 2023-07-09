@@ -31,7 +31,7 @@ const Board = () => {
     if(isTie){
        alert('Its a Draw');
        dispatch(resetGame())
-
+       
      }
     if (winner) {
       if (winner === 'X') {
