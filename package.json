@@ -1,5 +1,6 @@
 {
   "name": "tic_tac_toe",
+  "homepage": "https://larrymotuzis24.github.io/tic-tac-toe",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
